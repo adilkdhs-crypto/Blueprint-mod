@@ -1,0 +1,10 @@
+{
+  "key.category.blueprint": "Blueprint",
+  "key.blueprint.load": "Load first Litematic",
+  "key.blueprint.materials": "Show material list",
+  "key.blueprint.rotate": "Rotate schematic 90\u00b0",
+  "key.blueprint.mirror_x": "Toggle X mirror",
+  "key.blueprint.mirror_z": "Toggle Z mirror",
+  "key.blueprint.anchor": "Move anchor to my position",
+  "key.blueprint.ghost": "Toggle ghost display"
+}

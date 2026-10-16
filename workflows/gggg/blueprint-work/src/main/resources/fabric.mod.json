@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "blueprint",
+  "version": "${version}",
+  "name": "Blueprint",
+  "description": "Einfache Schematic-Vorschau: laden, platzieren, bauen.",
+  "authors": ["du"],
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["dev.blueprint.BlueprintClient"]
+  },
+  "depends": {
+    "fabricloader": ">=0.19.5",
+    "minecraft": "~26.2",
+    "java": ">=25",
+    "fabric-api": "*"
+  }
+}
