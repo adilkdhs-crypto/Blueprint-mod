@@ -59,7 +59,7 @@ public class BlueprintClient implements ClientModInitializer {
             while (anchorKey.consumeClick()) { moveAnchorToPlayer(client); refreshGhosts(); announcePlacement(client); }
             while (ghostKey.consumeClick()) {
                 boolean on = GhostRenderer.toggleVisible();
-                if (client.player != null) client.player.displayClientMessage(
+                if (client.player != null) Msg.send(client, 
                     Component.literal("[Blueprint] Geisteranzeige " + (on ? "an" : "aus")), true);
             }
         });
@@ -69,19 +69,19 @@ public class BlueprintClient implements ClientModInitializer {
     private static void showMaterials(Minecraft client) {
         if (client.player == null) return;
         if (currentSchematic == null) {
-            client.player.displayClientMessage(Component.literal("[Blueprint] Erst eine Datei mit F8 laden."), false);
+            Msg.send(client, Component.literal("[Blueprint] Erst eine Datei mit F8 laden."), false);
             return;
         }
         var materials = currentSchematic.materialList();
-        client.player.displayClientMessage(Component.literal("[Blueprint] Materialliste für „" + currentSchematic.name + "“ (ohne Luft):"), false);
+        Msg.send(client, Component.literal("[Blueprint] Materialliste für „" + currentSchematic.name + "“ (ohne Luft):"), false);
         int shown = 0;
         for (var entry : materials.entrySet()) {
             if (shown++ >= 20) break;
-            client.player.displayClientMessage(Component.literal(" • " + MaterialFormat.prettyName(entry.getKey()) + ": "
+            Msg.send(client, Component.literal(" • " + MaterialFormat.prettyName(entry.getKey()) + ": "
                 + entry.getValue() + " (" + MaterialFormat.stacks(entry.getValue(), 64) + ")"), false);
         }
-        if (materials.size() > 20) client.player.displayClientMessage(Component.literal("… und " + (materials.size() - 20) + " weitere Blockarten."), false);
-        client.player.displayClientMessage(Component.literal("Gesamt: " + materials.values().stream().mapToInt(Integer::intValue).sum() + " Blöcke."), false);
+        if (materials.size() > 20) Msg.send(client, Component.literal("… und " + (materials.size() - 20) + " weitere Blockarten."), false);
+        Msg.send(client, Component.literal("Gesamt: " + materials.values().stream().mapToInt(Integer::intValue).sum() + " Blöcke."), false);
     }
 
     /** Berechnet die Geisterbloecke neu (nach Laden, Drehen, Spiegeln, Verschieben). */
@@ -105,7 +105,7 @@ public class BlueprintClient implements ClientModInitializer {
             int[] b = placement.worldBounds(currentSchematic);
             text += " | Bereich " + b[0] + "," + b[1] + "," + b[2] + " bis " + b[3] + "," + b[4] + "," + b[5];
         }
-        client.player.displayClientMessage(Component.literal(text), true);
+        Msg.send(client, Component.literal(text), true);
     }
 
     private static void loadFirstSchematic(Minecraft client) {
@@ -121,7 +121,7 @@ public class BlueprintClient implements ClientModInitializer {
                     .toList();
             }
             if (files.isEmpty()) {
-                client.player.displayClientMessage(Component.literal("[Blueprint] Keine .litematic-Datei gefunden. Lege eine Datei in " + folder.toAbsolutePath()), false);
+                Msg.send(client, Component.literal("[Blueprint] Keine .litematic-Datei gefunden. Lege eine Datei in " + folder.toAbsolutePath()), false);
                 return;
             }
             Schematic schematic = LitematicReader.read(files.get(0));
@@ -130,14 +130,14 @@ public class BlueprintClient implements ClientModInitializer {
             refreshGhosts();
             int[] bounds = schematic.boundsSize();
             String author = schematic.author.isBlank() ? "unbekannt" : schematic.author;
-            client.player.displayClientMessage(Component.literal("[Blueprint] Eingelesen: " + schematic.name
+            Msg.send(client, Component.literal("[Blueprint] Eingelesen: " + schematic.name
                 + " | Autor: " + author + " | Regionen: " + schematic.regions.size()
                 + " | Abmessungen: " + bounds[0] + "×" + bounds[1] + "×" + bounds[2]
                 + " | Datei: " + files.get(0).getFileName()), false);
-            client.player.displayClientMessage(Component.literal("[Blueprint] Anker auf deiner Position gesetzt. F7 Materialliste, F6 drehen, F5/F4 spiegeln."), false);
+            Msg.send(client, Component.literal("[Blueprint] Anker auf deiner Position gesetzt. F7 Materialliste, F6 drehen, F5/F4 spiegeln."), false);
         } catch (IOException | RuntimeException exception) {
             String reason = exception.getMessage() == null ? exception.getClass().getSimpleName() : exception.getMessage();
-            client.player.displayClientMessage(Component.literal("[Blueprint] Fehler beim Einlesen: " + reason), false);
+            Msg.send(client, Component.literal("[Blueprint] Fehler beim Einlesen: " + reason), false);
         }
     }
 }
